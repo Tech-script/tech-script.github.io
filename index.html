@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Techscript — A New Programming Language</title>
+  <meta name="description" content="Techscript is a modern programming language using .txs file extension. Built for developers who think differently."/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #060910;
+      --surface: #0d1117;
+      --border: #1e2d40;
+      --accent: #00e5ff;
+      --accent2: #7b61ff;
+      --text: #e2eaf4;
+      --muted: #5a7a99;
+      --green: #00ff88;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(6,9,16,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span { color: var(--accent2); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+
+    nav ul a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: var(--accent); }
+
+    .nav-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      padding: 6px 14px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-badge:hover { background: var(--accent); color: var(--bg); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.35s forwards;
+    }
+
+    .hero-title .glow {
+      color: var(--accent);
+      text-shadow: 0 0 40px rgba(0,229,255,0.4), 0 0 80px rgba(0,229,255,0.15);
+    }
+
+    .hero-ext {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(1rem, 3vw, 1.8rem);
+      color: var(--accent2);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.5s forwards;
+    }
+
+    .hero-desc {
+      max-width: 560px;
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.65s forwards;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.8s forwards;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 14px 32px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 24px rgba(0,229,255,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(0,229,255,0.5);
+    }
+
+    .btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 14px 32px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* CODE BLOCK */
+    .code-section {
+      position: relative;
+      z-index: 1;
+      padding: 80px 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .code-window {
+      width: 100%;
+      max-width: 700px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+
+    .code-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #0a0f18;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #ffbd2e; }
+    .dot.g { background: #28ca41; }
+
+    .code-filename {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-left: 8px;
+    }
+
+    .code-body {
+      padding: 28px 32px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .ln { color: #2a3f55; user-select: none; margin-right: 20px; }
+    .kw { color: var(--accent2); }
+    .fn { color: var(--accent); }
+    .str { color: var(--green); }
+    .cm { color: var(--muted); font-style: italic; }
+    .num { color: #ff9d5c; }
+    .var { color: var(--text); }
+
+    /* FEATURES */
+    .features {
+      position: relative;
+      z-index: 1;
+      padding: 80px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      margin-bottom: 60px;
+      letter-spacing: -0.02em;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .feature-card {
+      background: var(--surface);
+      padding: 36px 32px;
+      transition: background 0.2s;
+    }
+
+    .feature-card:hover { background: #111823; }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* EXTENSION BADGE */
+    .ext-section {
+      position: relative;
+      z-index: 1;
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .ext-badge {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(2rem, 8vw, 5rem);
+      font-weight: 700;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 20px 48px;
+      border-radius: 4px;
+      box-shadow: 0 0 60px rgba(0,229,255,0.35);
+      margin-bottom: 24px;
+    }
+
+    .ext-desc {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--accent);
+    }
+
+    .footer-text {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .footer-link {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      nav ul { display: none; }
+      footer { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Tech<span>script</span></div>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#syntax">Syntax</a></li>
+      <li><a href="https://github.com/tech-script" target="_blank">GitHub</a></li>
+    </ul>
+    <a class="nav-badge" href="https://github.com/tech-script" target="_blank">⭐ Star on GitHub</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">// A new programming language</div>
+    <h1 class="hero-title">
+      <span class="glow">Tech</span>script
+    </h1>
+    <div class="hero-ext">file extension: .txs</div>
+    <p class="hero-desc">
+      A modern, expressive programming language built for developers who think differently.
+      Open source. Powerful. Yours to shape.
+    </p>
+    <div class="hero-buttons">
+      <a class="btn-primary" href="https://github.com/tech-script" target="_blank">Get Started →</a>
+      <a class="btn-secondary" href="#syntax">View Syntax</a>
+    </div>
+  </section>
+
+  <!-- CODE WINDOW -->
+  <section class="code-section" id="syntax">
+    <div class="code-window">
+      <div class="code-titlebar">
+        <span class="dot r"></span>
+        <span class="dot y"></span>
+        <span class="dot g"></span>
+        <span class="code-filename">hello_world.txs</span>
+      </div>
+      <div class="code-body">
+        <div><span class="ln">1</span><span class="cm">// Techscript — hello world</span></div>
+        <div><span class="ln">2</span></div>
+        <div><span class="ln">3</span><span class="kw">func </span><span class="fn">main</span><span class="var">() {</span></div>
+        <div><span class="ln">4</span>&nbsp;&nbsp;<span class="fn">print</span><span class="var">(</span><span class="str">"Hello, World!"</span><span class="var">)</span></div>
+        <div><span class="ln">5</span><span class="var">}</span></div>
+        <div><span class="ln">6</span></div>
+        <div><span class="ln">7</span><span class="kw">let </span><span class="var">x </span><span class="kw">= </span><span class="num">42</span></div>
+        <div><span class="ln">8</span><span class="kw">let </span><span class="var">name </span><span class="kw">= </span><span class="str">"Techscript"</span></div>
+        <div><span class="ln">9</span></div>
+        <div><span class="ln">10</span><span class="fn">print</span><span class="var">(</span><span class="str">"Version: "</span><span class="var">, x)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-label">// why techscript</div>
+    <h2 class="section-title">Built different.</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Fast & Lightweight</h3>
+        <p>Designed to run efficiently with minimal overhead. Write less, do more.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧩</div>
+        <h3>Simple Syntax</h3>
+        <p>Clean, readable code structure that's easy to learn and fun to write.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔓</div>
+        <h3>Open Source</h3>
+        <p>Fully open source on GitHub. Fork it, extend it, make it your own.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛠️</div>
+        <h3>.txs Extension</h3>
+        <p>Every Techscript file uses the <code style="color:var(--accent)">.txs</code> extension — instantly recognizable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXT BADGE -->
+  <section class="ext-section">
+    <div class="ext-badge">.txs</div>
+    <p class="ext-desc">Every Techscript file carries the <strong>.txs</strong> extension — a mark of a new generation of code.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Techscript</div>
+    <div class="footer-text">
+      Open source on <a class="footer-link" href="https://github.com/tech-script" target="_blank">GitHub</a>
+    </div>
+    <div class="footer-text">Made with ❤️ by the Techscript team</div>
+  </footer>
+
+</body>
+</html>
