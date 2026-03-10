@@ -1,491 +1,618 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Techscript — A New Programming Language</title>
-  <meta name="description" content="Techscript is a modern programming language using .txs file extension. Built for developers who think differently."/>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <title>TechScript — Code the Future 🐉</title>
+  <meta name="description" content="TechScript is a friendly programming language that reads like plain English — and now builds websites too! No semicolons. No brackets. Just simple words."/>
+  <meta name="keywords" content="TechScript, txs, programming language, Tcode-Motion, easy coding, web builder"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #060910;
-      --surface: #0d1117;
-      --border: #1e2d40;
-      --accent: #00e5ff;
-      --accent2: #7b61ff;
-      --text: #e2eaf4;
-      --muted: #5a7a99;
-      --green: #00ff88;
+      --bg: #07050f;
+      --surface: #0f0820;
+      --surface2: #130b25;
+      --border: #2a1a4a;
+      --purple: #7c3aed;
+      --purple-light: #c084fc;
+      --purple-glow: rgba(124,58,237,0.35);
+      --pink: #e879f9;
+      --cyan: #22d3ee;
+      --green: #4ade80;
+      --orange: #fb923c;
+      --text: #f0e8ff;
+      --muted: #7c6a99;
+      --muted2: #4a3a6a;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       overflow-x: hidden;
+      cursor: none;
     }
-
-    /* Grid background */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--purple-light);
+      border-radius: 50%;
+      position: fixed; pointer-events: none;
+      z-index: 9999; transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(192,132,252,0.4);
+      border-radius: 50%; position: fixed;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+    }
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,58,237,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(232,121,249,0.07) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
     }
-
-    /* NAV */
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle {
+      position: absolute; width: 2px; height: 2px;
+      background: var(--purple-light); border-radius: 50%;
+      animation: floatUp linear infinite; opacity: 0;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh); opacity: 0; }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.2; }
+      100% { transform: translateY(-10vh); opacity: 0; }
+    }
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 48px;
-      background: rgba(6,9,16,0.85);
-      backdrop-filter: blur(12px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(7,5,15,0.75);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-
     .nav-logo {
-      font-family: 'Space Mono', monospace;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.05em;
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--purple-light); text-decoration: none;
     }
-
-    .nav-logo span { color: var(--accent2); }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 32px;
+    .dragon { font-size: 1.4rem; animation: bob 3s ease-in-out infinite; }
+    @keyframes bob { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-4px) rotate(5deg); } }
+    nav ul { list-style: none; display: flex; gap: 28px; }
+    nav ul a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+    nav ul a:hover { color: var(--purple-light); }
+    .nav-cta {
+      background: var(--purple); color: white !important;
+      padding: 8px 20px; border-radius: 6px;
+      font-family: 'Fira Code', monospace !important;
+      font-size: 0.78rem !important;
+      box-shadow: 0 0 20px var(--purple-glow);
+      transition: background 0.2s !important;
     }
-
-    nav ul a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-
-    nav ul a:hover { color: var(--accent); }
-
-    .nav-badge {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      padding: 6px 14px;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      border-radius: 2px;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .nav-badge:hover { background: var(--accent); color: var(--bg); }
-
-    /* HERO */
+    .nav-cta:hover { background: #6d28d9 !important; }
     .hero {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 140px 24px 80px;
     }
-
-    .hero-eyebrow {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 24px;
-      opacity: 0;
-      animation: fadeUp 0.6s 0.2s forwards;
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Fira Code', monospace; font-size: 0.73rem;
+      padding: 6px 16px; border: 1px solid var(--border);
+      border-radius: 100px; color: var(--muted);
+      background: rgba(124,58,237,0.08); margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
     }
-
+    .pulse { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 50% { box-shadow: 0 0 0 5px rgba(74,222,128,0); } }
+    .hero-icon { font-size: 5rem; display: block; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards, dragonFloat 4s 1s ease-in-out infinite; }
+    @keyframes dragonFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
     .hero-title {
-      font-size: clamp(3.5rem, 10vw, 8rem);
-      font-weight: 800;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      margin-bottom: 16px;
-      opacity: 0;
-      animation: fadeUp 0.7s 0.35s forwards;
+      font-size: clamp(4rem, 12vw, 9rem); font-weight: 900;
+      line-height: 0.92; letter-spacing: -0.04em; margin-bottom: 8px;
+      opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
     }
-
-    .hero-title .glow {
-      color: var(--accent);
-      text-shadow: 0 0 40px rgba(0,229,255,0.4), 0 0 80px rgba(0,229,255,0.15);
+    .t1 { color: var(--purple-light); }
+    .t2 { color: transparent; -webkit-text-stroke: 1px rgba(192,132,252,0.35); }
+    .hero-sub {
+      font-family: 'Fira Code', monospace;
+      font-size: clamp(0.9rem, 2.5vw, 1.15rem);
+      color: var(--purple); margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.7s 0.45s forwards;
     }
-
-    .hero-ext {
-      font-family: 'Space Mono', monospace;
-      font-size: clamp(1rem, 3vw, 1.8rem);
-      color: var(--accent2);
-      margin-bottom: 32px;
-      opacity: 0;
-      animation: fadeUp 0.7s 0.5s forwards;
-    }
-
     .hero-desc {
-      max-width: 560px;
-      font-size: 1.1rem;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 48px;
-      opacity: 0;
-      animation: fadeUp 0.7s 0.65s forwards;
+      max-width: 580px; font-size: 1.1rem;
+      color: var(--muted); line-height: 1.7; font-weight: 300;
+      margin-bottom: 12px;
+      opacity: 0; animation: fadeUp 0.7s 0.6s forwards;
     }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.7s 0.8s forwards;
+    .hero-tagline {
+      font-family: 'Fira Code', monospace; font-size: 0.85rem;
+      color: var(--muted2); margin-bottom: 44px;
+      opacity: 0; animation: fadeUp 0.7s 0.7s forwards;
     }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-      padding: 14px 32px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-decoration: none;
-      border-radius: 2px;
-      letter-spacing: 0.05em;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 0 24px rgba(0,229,255,0.3);
+    .hero-tagline span { color: var(--purple-light); }
+    .hero-btns {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s 0.85s forwards;
     }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 40px rgba(0,229,255,0.5);
+    .btn-main {
+      background: linear-gradient(135deg, var(--purple), #9333ea);
+      color: white; padding: 14px 34px;
+      font-family: 'Fira Code', monospace; font-size: 0.88rem; font-weight: 700;
+      text-decoration: none; border-radius: 8px;
+      box-shadow: 0 8px 32px var(--purple-glow);
+      transition: transform 0.15s, box-shadow 0.2s;
     }
-
-    .btn-secondary {
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 14px 32px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
-      text-decoration: none;
-      border-radius: 2px;
-      letter-spacing: 0.05em;
+    .btn-main:hover { transform: translateY(-3px); box-shadow: 0 12px 48px var(--purple-glow); }
+    .btn-ghost {
+      border: 1px solid var(--border); color: var(--muted);
+      padding: 14px 34px; font-family: 'Fira Code', monospace;
+      font-size: 0.88rem; text-decoration: none; border-radius: 8px;
       transition: border-color 0.2s, color 0.2s;
     }
-
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-
-    /* CODE BLOCK */
-    .code-section {
-      position: relative;
-      z-index: 1;
-      padding: 80px 24px;
-      display: flex;
-      justify-content: center;
+    .btn-ghost:hover { border-color: var(--purple); color: var(--purple-light); }
+    .install-wrap { margin-top: 36px; opacity: 0; animation: fadeUp 0.7s 1s forwards; }
+    .install-cmd {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 20px;
+      font-family: 'Fira Code', monospace; font-size: 0.84rem; color: var(--green);
     }
-
-    .code-window {
-      width: 100%;
-      max-width: 700px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-      opacity: 0;
-      animation: fadeUp 0.8s 1s forwards;
+    .prompt { color: var(--muted); }
+    .copy-btn {
+      background: none; border: 1px solid var(--border); cursor: pointer;
+      color: var(--muted); font-size: 0.73rem; padding: 4px 8px;
+      border-radius: 4px; font-family: 'Outfit', sans-serif;
+      transition: color 0.2s, border-color 0.2s;
     }
-
-    .code-titlebar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      background: #0a0f18;
-      border-bottom: 1px solid var(--border);
+    .copy-btn:hover { color: var(--purple-light); border-color: var(--purple); }
+    .badges {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
+      padding: 0 24px 70px;
+      opacity: 0; animation: fadeUp 0.7s 1.2s forwards;
     }
-
-    .dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot.r { background: #ff5f57; }
-    .dot.y { background: #ffbd2e; }
-    .dot.g { background: #28ca41; }
-
-    .code-filename {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-left: 8px;
+    .badge {
+      font-family: 'Fira Code', monospace; font-size: 0.71rem;
+      padding: 5px 12px; border-radius: 4px; border: 1px solid;
     }
-
-    .code-body {
-      padding: 28px 32px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
-      line-height: 1.8;
-      overflow-x: auto;
+    .bp { border-color: var(--purple); color: var(--purple-light); background: rgba(124,58,237,0.1); }
+    .bb { border-color: #3b82f6; color: #93c5fd; background: rgba(59,130,246,0.1); }
+    .bg { border-color: #22c55e; color: #86efac; background: rgba(34,197,94,0.1); }
+    .bo { border-color: #f97316; color: #fdba74; background: rgba(249,115,22,0.1); }
+    .bc { border-color: var(--cyan); color: var(--cyan); background: rgba(34,211,238,0.1); }
+    .divider { position: relative; z-index: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 48px; }
+    .section { position: relative; z-index: 1; padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-sm { max-width: 900px; }
+    .eyebrow { font-family: 'Fira Code', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+    .sec-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 48px; line-height: 1.1; }
+    .sec-title em { color: var(--purple-light); font-style: normal; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .cpanel { background: var(--surface); padding: 28px; }
+    .cpanel.r { background: var(--surface2); }
+    .cpanel-hdr { font-family: 'Fira Code', monospace; font-size: 0.73rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .cpanel-hdr.bad { color: #f87171; }
+    .cpanel-hdr.good { color: var(--green); }
+    pre { font-family: 'Fira Code', monospace; font-size: 0.81rem; line-height: 1.8; overflow-x: auto; }
+    .kw { color: #818cf8; } .fn { color: var(--cyan); } .str { color: var(--green); } .cm { color: var(--muted); font-style: italic; } .num { color: var(--orange); } .op { color: var(--purple-light); }
+    .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .feat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 32px 28px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
     }
-
-    .ln { color: #2a3f55; user-select: none; margin-right: 20px; }
-    .kw { color: var(--accent2); }
-    .fn { color: var(--accent); }
-    .str { color: var(--green); }
-    .cm { color: var(--muted); font-style: italic; }
-    .num { color: #ff9d5c; }
-    .var { color: var(--text); }
-
-    /* FEATURES */
-    .features {
-      position: relative;
-      z-index: 1;
-      padding: 80px 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      margin-bottom: 60px;
-      letter-spacing: -0.02em;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-
-    .feature-card {
-      background: var(--surface);
-      padding: 36px 32px;
-      transition: background 0.2s;
-    }
-
-    .feature-card:hover { background: #111823; }
-
-    .feature-icon {
-      font-size: 1.8rem;
-      margin-bottom: 16px;
-    }
-
-    .feature-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: -0.01em;
-    }
-
-    .feature-card p {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* EXTENSION BADGE */
-    .ext-section {
-      position: relative;
-      z-index: 1;
-      padding: 80px 24px;
-      text-align: center;
-    }
-
-    .ext-badge {
-      display: inline-block;
-      font-family: 'Space Mono', monospace;
-      font-size: clamp(2rem, 8vw, 5rem);
-      font-weight: 700;
-      color: var(--bg);
-      background: var(--accent);
-      padding: 20px 48px;
-      border-radius: 4px;
-      box-shadow: 0 0 60px rgba(0,229,255,0.35);
-      margin-bottom: 24px;
-    }
-
-    .ext-desc {
-      color: var(--muted);
-      font-size: 1rem;
-      max-width: 400px;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
-
-    /* FOOTER */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 40px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-logo {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.9rem;
-      color: var(--accent);
-    }
-
-    .footer-text {
-      font-size: 0.8rem;
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-    }
-
-    .footer-link {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* SCROLLBAR */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    @media (max-width: 600px) {
-      nav { padding: 14px 20px; }
-      nav ul { display: none; }
+    .feat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--purple), transparent); opacity: 0; transition: opacity 0.3s; }
+    .feat-card:hover { border-color: var(--purple); transform: translateY(-4px); box-shadow: 0 16px 48px var(--purple-glow); }
+    .feat-card:hover::before { opacity: 1; }
+    .feat-icon { font-size: 1.9rem; margin-bottom: 14px; display: block; }
+    .feat-card h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: 9px; }
+    .feat-card p { font-size: 0.87rem; color: var(--muted); line-height: 1.65; }
+    .feat-tag { display: inline-block; margin-top: 12px; font-family: 'Fira Code', monospace; font-size: 0.69rem; padding: 3px 10px; border-radius: 100px; background: rgba(124,58,237,0.15); color: var(--purple-light); border: 1px solid var(--border); }
+    .code-window { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px var(--purple-glow); }
+    .code-bar { display: flex; align-items: center; gap: 8px; padding: 14px 20px; background: #0a0515; border-bottom: 1px solid var(--border); }
+    .dot2 { width: 12px; height: 12px; border-radius: 50%; }
+    .dr { background: #ff5f57; } .dy { background: #ffbd2e; } .dg { background: #28ca41; }
+    .code-tabs { display: flex; margin-left: 16px; }
+    .ctab { font-family: 'Fira Code', monospace; font-size: 0.72rem; padding: 4px 16px; color: var(--muted); border-right: 1px solid var(--border); cursor: pointer; transition: color 0.2s, background 0.2s; }
+    .ctab.active { color: var(--purple-light); background: var(--surface); }
+    .ctab:hover { color: var(--text); }
+    .code-body { padding: 28px 32px; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.8; overflow-x: auto; }
+    .ln { color: #2a1a4a; user-select: none; margin-right: 20px; display: inline-block; width: 22px; text-align: right; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .plat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 48px; }
+    .plat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 28px 20px; text-align: center; transition: border-color 0.2s; }
+    .plat-card:hover { border-color: var(--purple); }
+    .plat-card .icon { font-size: 2.2rem; margin-bottom: 12px; display: block; }
+    .plat-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .plat-card p { font-size: 0.79rem; color: var(--muted); line-height: 1.5; }
+    .plat-status { display: inline-block; margin-top: 12px; font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 3px 10px; border-radius: 100px; background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
+    .cmd-table { width: 100%; border-collapse: collapse; font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+    .cmd-table th { text-align: left; padding: 14px 20px; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .cmd-table td { padding: 14px 20px; border-bottom: 1px solid rgba(42,26,74,0.5); vertical-align: middle; }
+    .cmd-table tr:hover td { background: rgba(124,58,237,0.05); }
+    .ccmd { color: var(--cyan); } .cdesc { color: var(--muted); font-family: 'Outfit', sans-serif; font-size: 0.84rem; } .cex { color: var(--muted2); font-size: 0.77rem; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .about-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px 36px; }
+    .about-card h3 { font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; }
+    .about-role { font-family: 'Fira Code', monospace; font-size: 0.73rem; color: var(--purple); margin-bottom: 20px; }
+    .about-quote { font-size: 0.9rem; color: var(--muted); line-height: 1.7; font-style: italic; margin-bottom: 12px; }
+    .about-bio { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+    .alinks { display: flex; gap: 10px; flex-wrap: wrap; }
+    .alink { font-family: 'Fira Code', monospace; font-size: 0.73rem; padding: 7px 16px; border-radius: 6px; text-decoration: none; border: 1px solid var(--border); color: var(--muted); transition: border-color 0.2s, color 0.2s; }
+    .alink:hover { border-color: var(--purple); color: var(--purple-light); }
+    .proj-list { list-style: none; }
+    .proj-list li { display: flex; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+    .proj-list li:last-child { border-bottom: none; }
+    .picon { font-size: 1.1rem; flex-shrink: 0; }
+    .pname { font-weight: 700; font-size: 0.9rem; }
+    .pdesc { color: var(--muted); font-size: 0.81rem; margin-top: 2px; }
+    .cta-section { position: relative; z-index: 1; padding: 100px 24px; text-align: center; }
+    .cta-box { max-width: 700px; margin: 0 auto; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 64px 48px; position: relative; overflow: hidden; }
+    .cta-box::before { content: ''; position: absolute; top: -60%; left: -20%; width: 140%; height: 120%; background: radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%); pointer-events: none; }
+    .cta-dragon { font-size: 4rem; display: block; margin-bottom: 16px; }
+    .cta-box h2 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 16px; }
+    .cta-box p { color: var(--muted); font-size: 1rem; line-height: 1.6; margin-bottom: 36px; }
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .flogo { font-family: 'Fira Code', monospace; font-size: 0.9rem; color: var(--purple-light); }
+    .ftext { font-size: 0.79rem; color: var(--muted); font-family: 'Fira Code', monospace; }
+    .flink { color: var(--purple-light); text-decoration: none; }
+    .flink:hover { text-decoration: underline; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; } nav ul { display: none; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
       footer { padding: 32px 20px; }
+      .cta-box { padding: 40px 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">Tech<span>script</span></div>
-    <ul>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#syntax">Syntax</a></li>
-      <li><a href="https://github.com/tech-script" target="_blank">GitHub</a></li>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="particles" id="particles"></div>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <span class="dragon">🐉</span>TechScript
+  </a>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#syntax">Syntax</a></li>
+    <li><a href="#platforms">Install</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a class="nav-cta" href="https://github.com/Tcode-Motion/techscript" target="_blank">⭐ GitHub</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="pulse"></span>v1.0.1 — Now with web building!</div>
+  <span class="hero-icon">🐉</span>
+  <h1 class="hero-title"><span class="t1">Tech</span><span class="t2">Script</span></h1>
+  <div class="hero-sub">// file extension: .txs</div>
+  <p class="hero-desc">A friendly programming language that reads like plain English — and now builds websites too!</p>
+  <div class="hero-tagline">
+    <span>No semicolons.</span> &nbsp;<span>No brackets.</span> &nbsp;<span>No confusing symbols.</span>
+  </div>
+  <div class="hero-btns">
+    <a class="btn-main" href="https://github.com/Tcode-Motion/techscript" target="_blank">🐉 Get Started</a>
+    <a class="btn-ghost" href="#syntax">View Syntax →</a>
+  </div>
+  <div class="install-wrap">
+    <div class="install-cmd">
+      <span class="prompt">$</span>
+      <span>pip install techscript</span>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('pip install techscript');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<div class="badges">
+  <span class="badge bp">version v1.0.1</span>
+  <span class="badge bb">Python 3.10+</span>
+  <span class="badge bg">Windows | macOS | Linux | Android</span>
+  <span class="badge bo">MIT License</span>
+  <span class="badge bc">VS Code Extension</span>
+  <span class="badge bp">Made by Tcode-Motion</span>
+</div>
+
+<div class="divider"></div>
+
+<!-- COMPARE -->
+<div class="section section-sm reveal">
+  <div class="eyebrow">// why techscript</div>
+  <h2 class="sec-title">Code that <em>makes sense</em>.</h2>
+  <div class="compare-grid">
+    <div class="cpanel">
+      <div class="cpanel-hdr bad">❌ Normal JavaScript</div>
+      <pre><span class="kw">const</span> x = document.<span class="fn">getElementById</span>(<span class="str">'name'</span>);
+<span class="kw">if</span> (x !== <span class="kw">null</span> && x.value.<span class="fn">length</span> > <span class="num">0</span>) {
+  <span class="kw">let</span> msg = <span class="str">`Hello, ${x.value}!`</span>;
+  console.<span class="fn">log</span>(msg);
+}</pre>
+    </div>
+    <div class="cpanel r">
+      <div class="cpanel-hdr good">✅ TechScript</div>
+      <pre><span class="op">make</span> name = <span class="fn">ask</span> <span class="str">"What is your name? "</span>
+<span class="op">say</span> <span class="fn">f</span><span class="str">"Hello, {name}!"</span></pre>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<div class="section reveal" id="features">
+  <div class="eyebrow">// what it can do</div>
+  <h2 class="sec-title">Everything you <em>need</em>.</h2>
+  <div class="feat-grid">
+    <div class="feat-card reveal">
+      <span class="feat-icon">🗣️</span>
+      <h3>Plain English Syntax</h3>
+      <p>Write <code style="color:var(--cyan)">say</code>, <code style="color:var(--cyan)">make</code>, <code style="color:var(--cyan)">ask</code>, <code style="color:var(--cyan)">when</code> — code that reads like real sentences.</p>
+      <span class="feat-tag">say "Hello!"</span>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🌐</span>
+      <h3>Build Websites</h3>
+      <p>Use <code style="color:var(--cyan)">use web</code> to build full websites. No HTML, CSS, or JS files needed.</p>
+      <span class="feat-tag">NEW in v1.0.1</span>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🐍</span>
+      <h3>Python Powered</h3>
+      <p>Built on Python. Works everywhere. Transpile your <code style="color:var(--cyan)">.txs</code> code to Python instantly.</p>
+      <span class="feat-tag">pip install techscript</span>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🏗️</span>
+      <h3>OOP with Models</h3>
+      <p>Create classes with <code style="color:var(--cyan)">model</code>, methods with <code style="color:var(--cyan)">build</code>. Full OOP, simplified.</p>
+      <span class="feat-tag">model Dog { ... }</span>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">⚠️</span>
+      <h3>Error Handling</h3>
+      <p>Catch errors with <code style="color:var(--cyan)">attempt</code> and <code style="color:var(--cyan)">catch</code>. No more silent crashes.</p>
+      <span class="feat-tag">attempt { } catch { }</span>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🎨</span>
+      <h3>VS Code Extension</h3>
+      <p>Syntax highlighting, snippets, and the 🐉 dragon icon for all <code style="color:var(--cyan)">.txs</code> files.</p>
+      <span class="feat-tag">techscript-2.0.0.vsix</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CODE DEMO -->
+<div class="section section-sm reveal" id="syntax">
+  <div class="eyebrow">// live examples</div>
+  <h2 class="sec-title" style="margin-bottom:36px">See it in <em>action</em>.</h2>
+  <div class="code-window">
+    <div class="code-bar">
+      <span class="dot2 dr"></span><span class="dot2 dy"></span><span class="dot2 dg"></span>
+      <div class="code-tabs">
+        <div class="ctab active" onclick="switchTab('hello',this)">hello.txs</div>
+        <div class="ctab" onclick="switchTab('web',this)">website.txs</div>
+        <div class="ctab" onclick="switchTab('cls',this)">classes.txs</div>
+      </div>
+    </div>
+    <div class="code-body">
+      <div class="tab-panel active" id="tab-hello">
+<div><span class="ln">1</span><span class="cm"># Your first TechScript program</span></div>
+<div><span class="ln">2</span></div>
+<div><span class="ln">3</span><span class="op">say</span> <span class="str">"Hello, World! 🐉"</span></div>
+<div><span class="ln">4</span><span class="op">make</span> name = <span class="fn">ask</span> <span class="str">"What is your name? "</span></div>
+<div><span class="ln">5</span><span class="op">say</span> <span class="fn">f</span><span class="str">"Nice to meet you, {name}!"</span></div>
+<div><span class="ln">6</span></div>
+<div><span class="ln">7</span><span class="op">make</span> age = <span class="fn">int</span>(<span class="fn">ask</span> <span class="str">"Your age? "</span>)</div>
+<div><span class="ln">8</span></div>
+<div><span class="ln">9</span><span class="op">when</span> age >= <span class="num">18</span> {</div>
+<div><span class="ln">10</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">say</span> <span class="str">"You are an adult!"</span></div>
+<div><span class="ln">11</span>} <span class="op">or when</span> age >= <span class="num">13</span> {</div>
+<div><span class="ln">12</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">say</span> <span class="str">"You are a teenager!"</span></div>
+<div><span class="ln">13</span>} <span class="op">else</span> {</div>
+<div><span class="ln">14</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">say</span> <span class="str">"You are a child!"</span></div>
+<div><span class="ln">15</span>}</div>
+      </div>
+      <div class="tab-panel" id="tab-web">
+<div><span class="ln">1</span><span class="op">use</span> web</div>
+<div><span class="ln">2</span></div>
+<div><span class="ln">3</span><span class="op">make</span> page = <span class="fn">WebPage</span>(<span class="str">"My Website"</span>)</div>
+<div><span class="ln">4</span></div>
+<div><span class="ln">5</span>page.<span class="fn">style</span>(<span class="str">"body"</span>, {</div>
+<div><span class="ln">6</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"background"</span>: <span class="str">"#0f0f11"</span>,</div>
+<div><span class="ln">7</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"color"</span>: <span class="str">"#eeeeee"</span>,</div>
+<div><span class="ln">8</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"text-align"</span>: <span class="str">"center"</span></div>
+<div><span class="ln">9</span>})</div>
+<div><span class="ln">10</span></div>
+<div><span class="ln">11</span>page.<span class="fn">body</span>([</div>
+<div><span class="ln">12</span>&nbsp;&nbsp;&nbsp;&nbsp;page.<span class="fn">h1</span>(<span class="str">"Welcome! 🐉"</span>),</div>
+<div><span class="ln">13</span>&nbsp;&nbsp;&nbsp;&nbsp;page.<span class="fn">p</span>(<span class="str">"Built 100% in TechScript."</span>),</div>
+<div><span class="ln">14</span>&nbsp;&nbsp;&nbsp;&nbsp;page.<span class="fn">button</span>(<span class="str">"Click Me!"</span>, {})</div>
+<div><span class="ln">15</span>])</div>
+<div><span class="ln">16</span></div>
+<div><span class="ln">17</span>page.<span class="fn">run</span>() <span class="cm"># Browser opens automatically!</span></div>
+      </div>
+      <div class="tab-panel" id="tab-cls">
+<div><span class="ln">1</span><span class="op">model</span> Dog {</div>
+<div><span class="ln">2</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">build</span> <span class="fn">init</span>(self, name, breed) {</div>
+<div><span class="ln">3</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.name = name</div>
+<div><span class="ln">4</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.breed = breed</div>
+<div><span class="ln">5</span>&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+<div><span class="ln">6</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">build</span> <span class="fn">speak</span>(self) {</div>
+<div><span class="ln">7</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">say</span> <span class="fn">f</span><span class="str">"{self.name} says: Woof! 🐾"</span></div>
+<div><span class="ln">8</span>&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+<div><span class="ln">9</span>}</div>
+<div><span class="ln">10</span></div>
+<div><span class="ln">11</span><span class="op">make</span> rex = <span class="fn">Dog</span>(<span class="str">"Rex"</span>, <span class="str">"German Shepherd"</span>)</div>
+<div><span class="ln">12</span>rex.<span class="fn">speak</span>() <span class="cm"># Rex says: Woof! 🐾</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PLATFORMS -->
+<div class="section reveal" id="platforms" style="text-align:center">
+  <div class="eyebrow">// install anywhere</div>
+  <h2 class="sec-title">Works <em>everywhere</em>.</h2>
+  <div class="plat-grid">
+    <div class="plat-card reveal">
+      <span class="icon">🪟</span>
+      <h3>Windows</h3>
+      <p>One-click <code style="color:var(--cyan);font-size:0.77rem">TechScript-Setup.exe</code> installer or pip</p>
+      <span class="plat-status">✅ Fully Supported</span>
+    </div>
+    <div class="plat-card reveal">
+      <span class="icon">🍎</span>
+      <h3>macOS</h3>
+      <p>One-line install script or <code style="color:var(--cyan);font-size:0.77rem">pip3 install</code></p>
+      <span class="plat-status">✅ Fully Supported</span>
+    </div>
+    <div class="plat-card reveal">
+      <span class="icon">🐧</span>
+      <h3>Linux</h3>
+      <p>Ubuntu, Kali, Arch — all work via pip or install script</p>
+      <span class="plat-status">✅ Fully Supported</span>
+    </div>
+    <div class="plat-card reveal">
+      <span class="icon">📱</span>
+      <h3>Android</h3>
+      <p>Via Termux: <code style="color:var(--cyan);font-size:0.77rem">pkg install python</code> then pip</p>
+      <span class="plat-status">✅ Works</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- COMMANDS -->
+<div class="section section-sm reveal">
+  <div class="eyebrow">// cli reference</div>
+  <h2 class="sec-title" style="margin-bottom:36px">All <em>commands</em>.</h2>
+  <table class="cmd-table">
+    <thead><tr><th>Command</th><th>What it does</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td class="ccmd">tech run file.txs</td><td class="cdesc">Run a TechScript file</td><td class="cex">tech run hello.txs</td></tr>
+      <tr><td class="ccmd">tech run file.txs --debug</td><td class="cdesc">Run with debug info</td><td class="cex">tech run app.txs --debug</td></tr>
+      <tr><td class="ccmd">tech check file.txs</td><td class="cdesc">Check for errors without running</td><td class="cex">tech check app.txs</td></tr>
+      <tr><td class="ccmd">tech repl</td><td class="cdesc">Open interactive live mode</td><td class="cex">tech repl</td></tr>
+      <tr><td class="ccmd">tech transpile file.txs</td><td class="cdesc">Convert your code to Python</td><td class="cex">tech transpile hello.txs</td></tr>
+      <tr><td class="ccmd">tech version</td><td class="cdesc">Show installed version</td><td class="cex">tech -V</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<div class="section reveal" id="about">
+  <div class="eyebrow">// the creator</div>
+  <h2 class="sec-title" style="margin-bottom:48px">Made by <em>Tcode-Motion</em>.</h2>
+  <div class="about-grid">
+    <div class="about-card">
+      <h3>Tanmoy</h3>
+      <div class="about-role">// Tcode-Motion</div>
+      <p class="about-quote">"Predict the future by coding it." ⚡</p>
+      <p class="about-bio">Building languages, AI systems, and the future — one project at a time.</p>
+      <div class="alinks">
+        <a class="alink" href="https://github.com/Tcode-Motion" target="_blank">🐙 GitHub</a>
+        <a class="alink" href="https://youtube.com/@sachkaswitch" target="_blank">▶️ YouTube</a>
+      </div>
+    </div>
+    <ul class="proj-list">
+      <li><span class="picon">🐉</span><div><div class="pname">TechScript</div><div class="pdesc">Modern scripting language — compiles to Python + builds websites</div></div></li>
+      <li><span class="picon">🧠</span><div><div class="pname">Project JARVIS</div><div class="pdesc">Personal AI assistant built in Python</div></div></li>
+      <li><span class="picon">💻</span><div><div class="pname">Stark OS</div><div class="pdesc">Sci-Fi UI for web environments</div></div></li>
+      <li><span class="picon">🎨</span><div><div class="pname">3D Visuals</div><div class="pdesc">WebGL particle systems + Three.js experiences</div></div></li>
+      <li><span class="picon">🤖</span><div><div class="pname">AR Keyboard</div><div class="pdesc">Hand-gesture virtual keyboard with OpenCV + MediaPipe</div></div></li>
     </ul>
-    <a class="nav-badge" href="https://github.com/tech-script" target="_blank">⭐ Star on GitHub</a>
-  </nav>
+  </div>
+</div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-eyebrow">// A new programming language</div>
-    <h1 class="hero-title">
-      <span class="glow">Tech</span>script
-    </h1>
-    <div class="hero-ext">file extension: .txs</div>
-    <p class="hero-desc">
-      A modern, expressive programming language built for developers who think differently.
-      Open source. Powerful. Yours to shape.
-    </p>
-    <div class="hero-buttons">
-      <a class="btn-primary" href="https://github.com/tech-script" target="_blank">Get Started →</a>
-      <a class="btn-secondary" href="#syntax">View Syntax</a>
+<!-- CTA -->
+<section class="cta-section reveal">
+  <div class="cta-box">
+    <span class="cta-dragon">🐉</span>
+    <h2>Code the Future<br/>with TechScript.</h2>
+    <p>Open source. Free forever. Built for everyone — from beginners to builders.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a class="btn-main" href="https://github.com/Tcode-Motion/techscript" target="_blank">⭐ Star on GitHub</a>
+      <a class="btn-ghost" href="https://youtube.com/@sachkaswitch" target="_blank">▶️ YouTube</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CODE WINDOW -->
-  <section class="code-section" id="syntax">
-    <div class="code-window">
-      <div class="code-titlebar">
-        <span class="dot r"></span>
-        <span class="dot y"></span>
-        <span class="dot g"></span>
-        <span class="code-filename">hello_world.txs</span>
-      </div>
-      <div class="code-body">
-        <div><span class="ln">1</span><span class="cm">// Techscript — hello world</span></div>
-        <div><span class="ln">2</span></div>
-        <div><span class="ln">3</span><span class="kw">func </span><span class="fn">main</span><span class="var">() {</span></div>
-        <div><span class="ln">4</span>&nbsp;&nbsp;<span class="fn">print</span><span class="var">(</span><span class="str">"Hello, World!"</span><span class="var">)</span></div>
-        <div><span class="ln">5</span><span class="var">}</span></div>
-        <div><span class="ln">6</span></div>
-        <div><span class="ln">7</span><span class="kw">let </span><span class="var">x </span><span class="kw">= </span><span class="num">42</span></div>
-        <div><span class="ln">8</span><span class="kw">let </span><span class="var">name </span><span class="kw">= </span><span class="str">"Techscript"</span></div>
-        <div><span class="ln">9</span></div>
-        <div><span class="ln">10</span><span class="fn">print</span><span class="var">(</span><span class="str">"Version: "</span><span class="var">, x)</span></div>
-      </div>
-    </div>
-  </section>
+<footer>
+  <div class="flogo">🐉 TechScript</div>
+  <div class="ftext">MIT License · <a class="flink" href="https://github.com/Tcode-Motion/techscript" target="_blank">GitHub</a></div>
+  <div class="ftext">Made with ❤️ by <a class="flink" href="https://github.com/Tcode-Motion" target="_blank">Tcode-Motion</a></div>
+</footer>
 
-  <!-- FEATURES -->
-  <section class="features" id="features">
-    <div class="section-label">// why techscript</div>
-    <h2 class="section-title">Built different.</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Fast & Lightweight</h3>
-        <p>Designed to run efficiently with minimal overhead. Write less, do more.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🧩</div>
-        <h3>Simple Syntax</h3>
-        <p>Clean, readable code structure that's easy to learn and fun to write.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔓</div>
-        <h3>Open Source</h3>
-        <p>Fully open source on GitHub. Fork it, extend it, make it your own.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🛠️</div>
-        <h3>.txs Extension</h3>
-        <p>Every Techscript file uses the <code style="color:var(--accent)">.txs</code> extension — instantly recognizable.</p>
-      </div>
-    </div>
-  </section>
+<script>
+  // Cursor
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function anim() {
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(anim);
+  })();
 
-  <!-- EXT BADGE -->
-  <section class="ext-section">
-    <div class="ext-badge">.txs</div>
-    <p class="ext-desc">Every Techscript file carries the <strong>.txs</strong> extension — a mark of a new generation of code.</p>
-  </section>
+  // Particles
+  const pc = document.getElementById('particles');
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'vw';
+    p.style.animationDuration=(8+Math.random()*14)+'s';
+    p.style.animationDelay=(Math.random()*12)+'s';
+    const sz=1+Math.random()*2;
+    p.style.width=p.style.height=sz+'px';
+    pc.appendChild(p);
+  }
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">Techscript</div>
-    <div class="footer-text">
-      Open source on <a class="footer-link" href="https://github.com/tech-script" target="_blank">GitHub</a>
-    </div>
-    <div class="footer-text">Made with ❤️ by the Techscript team</div>
-  </footer>
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
+  // Tabs
+  function switchTab(name, el) {
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('tab-'+name).classList.add('active');
+    el.classList.add('active');
+  }
+</script>
 </body>
 </html>
