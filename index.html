@@ -12,17 +12,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg: #050509;
-  --bg2: #080812;
-  --surface: #0c0c1a;
-  --surface2: #111128;
-  --border: #1e1e3a;
-  --border2: #2a2a50;
+  --bg: #030307;
+  --bg2: #050510;
+  --surface: rgba(12, 12, 26, 0.7);
+  --surface2: rgba(17, 17, 40, 0.8);
+  --border: rgba(139, 92, 246, 0.2);
+  --border2: rgba(139, 92, 246, 0.4);
   --pu: #8b5cf6;
   --pu2: #a78bfa;
   --pu3: #c4b5fd;
-  --pu-glow: rgba(139,92,246,0.3);
-  --pu-glow2: rgba(139,92,246,0.12);
+  --pu-glow: rgba(139,92,246,0.4);
+  --pu-glow2: rgba(139,92,246,0.15);
   --fire: #f97316;
   --fire2: #fb923c;
   --cyan: #06b6d4;
@@ -30,12 +30,14 @@
   --green: #10b981;
   --green2: #34d399;
   --red: #ef4444;
-  --text: #e8e4f8;
-  --text2: #b8b0d8;
-  --muted: #6b6490;
-  --muted2: #3d3860;
+  --text: #ffffff;
+  --text2: #cbd5e1;
+  --muted: #94a3b8;
+  --muted2: #475569;
   --ff: 'Space Mono', monospace;
   --fs: 'Syne', sans-serif;
+  --glass: blur(16px);
+  --trans: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
@@ -98,16 +100,17 @@ nav {
   font-size: 1.3rem;
 }
 @keyframes dragonPulse {
-  0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 5px var(--pu-glow)); }
-  50% { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 15px var(--pu)); }
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px var(--pu-glow)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 20px var(--pu)); }
 }
-.nav-logo svg {
-  width: 32px; height: 32px;
+.nav-logo img {
+  width: 38px; height: 38px;
   animation: dragonPulse 4s infinite ease-in-out;
+  object-fit: contain;
 }
 @keyframes dragonBob {
-  0%,100% { transform: translateY(0) rotate(-8deg); }
-  50% { transform: translateY(-5px) rotate(8deg); }
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 .nav-links {
   display: flex; align-items: center; gap: 6px; list-style: none;
@@ -678,10 +681,8 @@ footer {
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px;">
-      <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" fill="var(--pu)"></path>
-    </svg>
-    TechScript
+    <img src="assets/logo.png" alt="TechScript Dragon">
+    <span>TechScript</span>
   </a>
   <ul class="nav-links">
     <li><a href="#what">What</a></li>
@@ -714,20 +715,7 @@ footer {
   <div class="hero-scanline"></div>
   <div class="hero-badge"><span class="badge-dot"></span>v1.0.3 — 150+ StdLib Functions · Native Rust VM</div>
   <div class="hero-dragon">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:var(--pu);stop-opacity:1" />
-          <stop offset="100%" style="stop-color:var(--fire);stop-opacity:1" />
-        </linearGradient>
-      </defs>
-      <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" fill="url(#grad1)" stroke="var(--text)" stroke-width="2">
-        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
-      </path>
-      <circle cx="50" cy="50" r="5" fill="var(--cyan2)">
-        <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite" />
-      </circle>
-    </svg>
+    <img src="assets/logo.png" alt="TechScript Logo" style="width:160px; height:160px; object-fit:contain;">
   </div>
   <h1 class="hero-title">
     <span class="ht1">Tech</span><span class="ht2">Script</span>
@@ -738,7 +726,7 @@ footer {
     <span>No semicolons.</span> &nbsp;·&nbsp; <span>No brackets.</span> &nbsp;·&nbsp; <span>No confusing symbols.</span>
   </div>
   <div class="hero-btns">
-    <a class="btn-fire" href="https://github.com/Tcode-Motion/techscript/releases/latest" target="_blank">📥 Download v1.0.3</a>
+    <a class="btn-fire" href="https://github.com/Tcode-Motion/techscript/releases/tag/v1.0.3" target="_blank">📥 Download v1.0.3</a>
     <a class="btn-line" href="#syntax">View Syntax →</a>
     <a class="btn-line" href="https://github.com/Tcode-Motion/techscript" target="_blank">⭐ GitHub</a>
   </div>
@@ -844,7 +832,7 @@ footer {
 <!-- EVOLUTION SECTION (Clean Version) -->
 <section id="what" class="section">
   <div class="container">
-    <div class="glass-box" data-aos="fade-up">
+    <div class="glass-box" data-aos="fade-up" style="background:var(--surface); backdrop-filter:var(--glass); border:1px solid var(--border2);">
       <h2 class="section-title">The Evolution of Speed & Simplicity</h2>
       <p style="text-align:center; max-width: 800px; margin: 0 auto 2rem;">TechScript has evolved from a simple Python interpreter into a high-performance, native Rust-powered powerhouse.</p>
       
@@ -1111,7 +1099,7 @@ class="sec reveal" id="features">
     <div class="install-box" data-aos="fade-right">
       <div class="ib-title">Method 1: Windows Installer (Recommended)</div>
       <p>Download our secure, standalone installer which sets up path and file associations automatically.</p>
-      <a href="https://github.com/Tcode-Motion/techscript/releases/download/v1.0.3/tech-setup.exe" class="btn btn-primary" style="margin-top:1rem;">
+      <a href="https://github.com/Tcode-Motion/techscript/releases/tag/v1.0.3" class="btn btn-primary" style="margin-top:1rem;">
         🚀 Download tech-setup.exe
       </a>
       <div style="margin-top:1rem; opacity:0.6; font-size:0.8rem;">Checksum (SHA-256): Verified Stable Release</div>
@@ -1352,12 +1340,12 @@ class="sec reveal" id="features">
 
 <!-- CTA -->
 <div class="cta-sec reveal">
-  <div class="cta-inner">
-    <span class="cta-dragon">🐉</span>
+  <div class="cta-inner" style="background:var(--surface); backdrop-filter:var(--glass); border:1px solid var(--border2); border-radius:12px; padding:60px;">
+    <img src="assets/logo.png" alt="TS Logo" style="width:80px; height:80px; margin-bottom:24px;">
     <h2>Code the Future<br/>with TechScript.</h2>
     <p>Open source. Free forever. Built for everyone — from total beginners to serious builders. Powered by a Native Rust VM.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <a class="btn-fire" href="https://github.com/Tcode-Motion/techscript/releases/latest" target="_blank">📥 Download v1.0.3</a>
+      <a class="btn-fire" href="https://github.com/Tcode-Motion/techscript/releases/tag/v1.0.3" target="_blank">📥 Download v1.0.3</a>
       <a class="btn-line" href="https://github.com/Tcode-Motion/techscript" target="_blank">⭐ Star on GitHub</a>
       <a class="btn-line" href="https://youtube.com/@sachkaswitch" target="_blank">▶️ YouTube</a>
     </div>
@@ -1365,9 +1353,12 @@ class="sec reveal" id="features">
 </div>
 
 <footer>
-  <div class="flogo">🐉 TechScript v1.0.3</div>
+  <div class="flogo">
+    <img src="assets/logo.png" alt="TS Logo" style="width:24px; height:24px; vertical-align:middle; margin-right:8px;">
+    TechScript v1.0.3
+  </div>
   <div class="fmid">MIT License &nbsp;·&nbsp; 150+ StdLib Functions &nbsp;·&nbsp; Native Rust VM<br/>
-    <a class="flink" href="https://github.com/Tcode-Motion/techscript" target="_blank">github.com/Tcode-Motion/techscript</a>
+    <a class="flink" href="https://github.com/Tcode-Motion/techscript/releases/tag/v1.0.3" target="_blank">View v1.0.3 Release Notes</a>
   </div>
   <div class="fright">Made with ❤️ by <a class="flink" href="https://github.com/Tcode-Motion" target="_blank">Tcode-Motion</a><br/>
     <a class="flink" href="https://youtube.com/@sachkaswitch" target="_blank">@sachkaswitch</a>
